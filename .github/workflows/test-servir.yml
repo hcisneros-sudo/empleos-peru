@@ -1,0 +1,49 @@
+name: Probar acceso SERVIR
+
+on:
+  workflow_dispatch:
+
+jobs:
+  probar:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar Playwright
+        run: |
+          pip install playwright
+          playwright install --with-deps chromium
+
+      - name: Probar SERVIR
+        run: |
+          python - <<'PY'
+          from playwright.sync_api import sync_playwright
+
+          url = "https://app.servir.gob.pe/DifusionOfertasExterno/faces/consultas/ofertas_laborales.xhtml"
+
+          with sync_playwright() as p:
+              browser = p.chromium.launch(headless=True)
+              page = browser.new_page(locale="es-PE")
+
+              response = page.goto(
+                  url,
+                  wait_until="domcontentloaded",
+                  timeout=60000
+              )
+
+              print("HTTP:", response.status if response else "sin respuesta")
+              print("Título:", page.title())
+              print("URL final:", page.url)
+
+              cantidad = page.locator(
+                  'input[name="javax.faces.ViewState"]'
+              ).count()
+
+              print("ViewState encontrados:", cantidad)
+
+              browser.close()
+          PY
