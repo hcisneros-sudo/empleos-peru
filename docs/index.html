@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#ffffff">
+  <title>Empleos públicos del Perú</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="hero">
+    <div class="wrap">
+      <div class="eyebrow">Buscador no oficial · datos de Talento Perú</div>
+      <h1>Encuentra convocatorias del Estado sin pelearte con los filtros</h1>
+      <p>Busca por puesto, entidad, profesión o palabra clave y combina filtros de ubicación, sueldo, experiencia y fecha de cierre.</p>
+      <div class="searchbar">
+        <span aria-hidden="true">⌕</span>
+        <input id="q" autocomplete="off" placeholder="Ej. economista, controversias, presupuesto, abogado…">
+        <button id="clearSearch" type="button" title="Limpiar">×</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap layout">
+    <aside class="filters" id="filters">
+      <div class="filter-head">
+        <strong>Filtros</strong>
+        <button class="link-btn" id="reset" type="button">Limpiar todo</button>
+      </div>
+      <label>Departamento<select id="department"><option value="">Todos</option></select></label>
+      <label>Entidad<select id="institution"><option value="">Todas</option></select></label>
+      <label>Régimen<select id="regime"><option value="">Todos</option></select></label>
+      <div class="two">
+        <label>Sueldo mínimo<input id="salaryMin" type="number" min="0" step="500" placeholder="0"></label>
+        <label>Sueldo máximo<input id="salaryMax" type="number" min="0" step="500" placeholder="Sin tope"></label>
+      </div>
+      <label>Experiencia máxima
+        <select id="experienceMax">
+          <option value="">Cualquiera</option><option value="0">Sin experiencia</option>
+          <option value="12">Hasta 1 año</option><option value="24">Hasta 2 años</option>
+          <option value="36">Hasta 3 años</option><option value="60">Hasta 5 años</option>
+        </select>
+      </label>
+      <label>Cierre
+        <select id="closing">
+          <option value="">Cualquier fecha</option><option value="3">En los próximos 3 días</option>
+          <option value="7">En los próximos 7 días</option><option value="14">En los próximos 14 días</option>
+        </select>
+      </label>
+      <label class="check"><input id="favoritesOnly" type="checkbox"> Solo favoritos</label>
+    </aside>
+
+    <section class="results">
+      <div class="toolbar">
+        <div><strong id="count">0</strong> convocatorias <span id="updated" class="muted"></span></div>
+        <label class="sort">Ordenar <select id="sort"><option value="closing">Cierra pronto</option><option value="salary">Mayor sueldo</option><option value="newest">Más reciente</option><option value="entity">Entidad A–Z</option></select></label>
+      </div>
+      <div id="chips" class="chips"></div>
+      <div id="cards" class="cards"><div class="empty">Cargando convocatorias…</div></div>
+    </section>
+  </main>
+
+  <footer class="wrap footer">
+    <p>Proyecto independiente. Verifica siempre bases, cronograma y requisitos en la convocatoria oficial antes de postular.</p>
+    <a href="https://app.servir.gob.pe/DifusionOfertasExterno/faces/consultas/ofertas_laborales.xhtml" target="_blank" rel="noopener">Abrir Talento Perú ↗</a>
+  </footer>
+  <script src="app.js"></script>
+</body>
+</html>
