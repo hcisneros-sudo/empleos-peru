@@ -3,67 +3,168 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#ffffff">
-  <title>Empleos públicos del Perú</title>
+  <meta name="theme-color" content="#0f3d33">
+  <meta name="description" content="Buscador independiente de convocatorias laborales públicas del Perú con datos de Talento Perú.">
+  <title>Empleos Perú · Convocatorias del Estado</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header class="hero">
-    <div class="wrap">
-      <div class="eyebrow">Buscador no oficial · datos de Talento Perú</div>
-      <h1>Encuentra convocatorias del Estado sin pelearte con los filtros</h1>
-      <p>Busca por puesto, entidad, profesión o palabra clave y combina filtros de ubicación, sueldo, experiencia y fecha de cierre.</p>
-      <div class="searchbar">
-        <span aria-hidden="true">⌕</span>
-        <input id="q" autocomplete="off" placeholder="Ej. economista, controversias, presupuesto, abogado…">
-        <button id="clearSearch" type="button" title="Limpiar">×</button>
-      </div>
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <a class="brand" href="#" aria-label="Empleos Perú, inicio">
+        <span class="brand-mark" aria-hidden="true">EP</span>
+        <span>
+          <strong>Empleos Perú</strong>
+          <small>Convocatorias del Estado</small>
+        </span>
+      </a>
+      <div class="source-badge">Datos de <strong>Talento Perú</strong></div>
     </div>
   </header>
 
-  <main class="wrap layout">
-    <aside class="filters" id="filters">
-      <div class="filter-head">
-        <strong>Filtros</strong>
-        <button class="link-btn" id="reset" type="button">Limpiar todo</button>
-      </div>
-      <label>Departamento<select id="department"><option value="">Todos</option></select></label>
-      <label>Entidad<select id="institution"><option value="">Todas</option></select></label>
-      <label>Régimen<select id="regime"><option value="">Todos</option></select></label>
-      <div class="two">
-        <label>Sueldo mínimo<input id="salaryMin" type="number" min="0" step="500" placeholder="0"></label>
-        <label>Sueldo máximo<input id="salaryMax" type="number" min="0" step="500" placeholder="Sin tope"></label>
-      </div>
-      <label>Experiencia máxima
-        <select id="experienceMax">
-          <option value="">Cualquiera</option><option value="0">Sin experiencia</option>
-          <option value="12">Hasta 1 año</option><option value="24">Hasta 2 años</option>
-          <option value="36">Hasta 3 años</option><option value="60">Hasta 5 años</option>
-        </select>
-      </label>
-      <label>Cierre
-        <select id="closing">
-          <option value="">Cualquier fecha</option><option value="3">En los próximos 3 días</option>
-          <option value="7">En los próximos 7 días</option><option value="14">En los próximos 14 días</option>
-        </select>
-      </label>
-      <label class="check"><input id="favoritesOnly" type="checkbox"> Solo favoritos</label>
-    </aside>
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <div class="eyebrow">Buscador independiente · información pública</div>
+        <h1>Encuentra una oportunidad en el Estado más rápido.</h1>
+        <p>Busca por puesto, profesión, entidad o palabra clave y combina filtros útiles de ubicación, sueldo, experiencia y fecha de cierre.</p>
 
-    <section class="results">
-      <div class="toolbar">
-        <div><strong id="count">0</strong> convocatorias <span id="updated" class="muted"></span></div>
-        <label class="sort">Ordenar <select id="sort"><option value="closing">Cierra pronto</option><option value="salary">Mayor sueldo</option><option value="newest">Más reciente</option><option value="entity">Entidad A–Z</option></select></label>
+        <div class="searchbar" role="search">
+          <span class="search-icon" aria-hidden="true">⌕</span>
+          <input id="q" autocomplete="off" aria-label="Buscar convocatorias" placeholder="Ej. economista, presupuesto, abogado, analista…">
+          <button id="clearSearch" type="button" title="Limpiar búsqueda" aria-label="Limpiar búsqueda">×</button>
+        </div>
+
+        <div class="quick-filters" aria-label="Filtros rápidos">
+          <button type="button" data-quick="closing3">Cierra pronto</button>
+          <button type="button" data-quick="salary5000">S/ 5,000+</button>
+          <button type="button" data-quick="experience12">Hasta 1 año</button>
+          <button type="button" data-quick="favorites">★ Favoritos</button>
+        </div>
       </div>
-      <div id="chips" class="chips"></div>
-      <div id="cards" class="cards"><div class="empty">Cargando convocatorias…</div></div>
-    </section>
+
+      <div class="hero-stats" aria-label="Resumen de convocatorias">
+        <div class="stat-card stat-main">
+          <span>Convocatorias</span>
+          <strong id="statJobs">—</strong>
+          <small>en la base vigente</small>
+        </div>
+        <div class="stat-row">
+          <div class="stat-card">
+            <span>Entidades</span>
+            <strong id="statEntities">—</strong>
+          </div>
+          <div class="stat-card">
+            <span>Departamentos</span>
+            <strong id="statDepartments">—</strong>
+          </div>
+        </div>
+        <div class="update-card">
+          <span class="status-dot"></span>
+          <span id="updated">Cargando fecha de actualización…</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main class="wrap main-area">
+    <div class="mobile-actions">
+      <button id="openFilters" class="filter-toggle" type="button">☰ Filtros <span id="filterCount"></span></button>
+    </div>
+
+    <div class="layout">
+      <aside class="filters" id="filters" aria-label="Filtros de búsqueda">
+        <div class="filter-head">
+          <div>
+            <strong>Filtrar resultados</strong>
+            <span>Combina uno o varios criterios</span>
+          </div>
+          <button class="link-btn" id="reset" type="button">Limpiar</button>
+        </div>
+
+        <label>Departamento
+          <select id="department"><option value="">Todos los departamentos</option></select>
+        </label>
+        <label>Entidad
+          <select id="institution"><option value="">Todas las entidades</option></select>
+        </label>
+        <label>Régimen
+          <select id="regime"><option value="">Todos los regímenes</option></select>
+        </label>
+
+        <div class="filter-group">
+          <span class="group-title">Remuneración mensual</span>
+          <div class="two">
+            <label>Desde<input id="salaryMin" type="number" min="0" step="500" placeholder="S/ 0"></label>
+            <label>Hasta<input id="salaryMax" type="number" min="0" step="500" placeholder="Sin tope"></label>
+          </div>
+        </div>
+
+        <label>Experiencia máxima
+          <select id="experienceMax">
+            <option value="">Cualquiera</option>
+            <option value="0">Sin experiencia</option>
+            <option value="12">Hasta 1 año</option>
+            <option value="24">Hasta 2 años</option>
+            <option value="36">Hasta 3 años</option>
+            <option value="60">Hasta 5 años</option>
+          </select>
+        </label>
+
+        <label>Fecha de cierre
+          <select id="closing">
+            <option value="">Cualquier fecha</option>
+            <option value="1">Hoy o mañana</option>
+            <option value="3">En los próximos 3 días</option>
+            <option value="7">En los próximos 7 días</option>
+            <option value="14">En los próximos 14 días</option>
+          </select>
+        </label>
+
+        <label class="check"><input id="favoritesOnly" type="checkbox"> <span>Mostrar solo favoritos</span></label>
+        <button class="mobile-apply" id="closeFilters" type="button">Ver resultados</button>
+      </aside>
+
+      <div class="filter-overlay" id="filterOverlay"></div>
+
+      <section class="results" aria-live="polite">
+        <div class="results-head">
+          <div>
+            <h2>Oportunidades encontradas</h2>
+            <p><strong id="count">0</strong> convocatorias coinciden con tu búsqueda.</p>
+          </div>
+          <label class="sort">Ordenar por
+            <select id="sort">
+              <option value="closing">Cierra pronto</option>
+              <option value="salary">Mayor sueldo</option>
+              <option value="newest">Más reciente</option>
+              <option value="entity">Entidad A–Z</option>
+            </select>
+          </label>
+        </div>
+
+        <div id="chips" class="chips"></div>
+        <div id="cards" class="cards"><div class="empty">Cargando convocatorias…</div></div>
+
+        <div class="pagination" id="pagination" hidden>
+          <button id="prevPage" type="button">← Anterior</button>
+          <span id="pageInfo"></span>
+          <button id="nextPage" type="button">Siguiente →</button>
+        </div>
+      </section>
+    </div>
   </main>
 
-  <footer class="wrap footer">
-    <p>Proyecto independiente. Verifica siempre bases, cronograma y requisitos en la convocatoria oficial antes de postular.</p>
-    <a href="https://app.servir.gob.pe/DifusionOfertasExterno/faces/consultas/ofertas_laborales.xhtml" target="_blank" rel="noopener">Abrir Talento Perú ↗</a>
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <div>
+        <strong>Empleos Perú</strong>
+        <p>Proyecto independiente. Verifica siempre las bases, cronograma y requisitos en la convocatoria oficial antes de postular.</p>
+      </div>
+      <a href="https://app.servir.gob.pe/DifusionOfertasExterno/faces/consultas/ofertas_laborales.xhtml" target="_blank" rel="noopener">Abrir Talento Perú ↗</a>
+    </div>
   </footer>
+
   <script src="app.js"></script>
 </body>
 </html>
